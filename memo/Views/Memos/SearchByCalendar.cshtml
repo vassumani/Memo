@@ -1,0 +1,185 @@
+﻿@model IEnumerable<memo.Models.Memo>
+
+    @{
+    ViewData["Title"] = "Index";
+    }
+
+<script>
+    window.onload = function() {
+        var url_string = window.location.href; //window.location.href
+        var url = new URL(url_string);
+        var fromDate = url.searchParams.get("fromDate");
+        var toDate = url.searchParams.get("toDate");
+        console.log("out of loop");
+        document.getElementById("fromDate").innerHTML=fromDate;
+    }
+    
+    function goBack() {
+    window.history.back();
+}
+</script>
+<span id="resultsView">
+    <h2>Showing memos created on <span id="fromDate"></span></h2>
+    <button class="btn btn-success btn-sm pull-left" onclick="goBack()">Go Back</button>
+    <div id="containernav">
+        <div class="inner-container">
+            <div class="toggle1">
+                <p>List View</p>
+            </div>
+            <div class="toggle1">
+                <p>List View</p>
+            </div>
+        </div>
+        <div class="inner-container" id='toggle-container'>
+            <div class="toggle1">
+                <p>Cards View</p>
+            </div>
+            <div class="toggle1">
+                <p>Cards View</p>
+            </div>
+        </div>
+    </div>
+    <style>
+        #containernav {
+            width: 160px;
+            height: 30px;
+            /*margin: auto;*/
+            position: relative;
+            border-radius: 6px;
+            /*overflow: hidden;*/
+            user-select: none;
+            cursor: pointer;
+            padding-left: 100px !important;
+            margin-left: 80px !important;
+        }
+
+        .inner-container {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: inherit;
+            height: inherit;
+            text-transform: uppercase;
+            font-size: .6em;
+            letter-spacing: .2em;
+        }
+
+        .inner-container:first-child {
+            background: #e9e9e9;
+            color: #a9a9a9;
+        }
+
+        .inner-container:nth-child(2) {
+            background: dodgerblue;
+            color: white;
+            clip-path: inset(0 50% 0 0);
+            transition: .3s cubic-bezier(0,0,0,1);
+        }
+
+        .toggle1 {
+            width: 50%;
+            position: absolute;
+            height: inherit;
+            display: flex;
+            box-sizing: border-box;
+        }
+
+        .toggle1 p {
+            margin: auto;
+        }
+
+        .toggle1:nth-child(1) {
+            right: 0;
+        }
+    </style>
+
+    <script>
+        var toggle = document.getElementById('containernav');
+        var toggleContainer = document.getElementById('toggle-container');
+        var toggleNumber;
+
+        toggle.addEventListener('click', function switchViewer() {
+            toggleNumber = !toggleNumber;
+            if (toggleNumber) {
+                toggleContainer.style.clipPath = 'inset(0 0 0 50%)';
+                toggleContainer.style.backgroundColor = '#D74046';
+
+                var x = document.getElementById("listView");
+                x.style.display = "block"
+                var y = document.getElementById("cardView");
+                y.style.display = "none"
+            } else {
+                toggleContainer.style.clipPath = 'inset(0 50% 0 0)';
+                toggleContainer.style.backgroundColor = 'dodgerblue';
+                var x = document.getElementById("cardView");
+                x.style.display = "block"
+                var y = document.getElementById("listView");
+                y.style.display = "none"
+            }
+            console.log(toggleNumber)
+        });
+    </script>
+
+<div id="listView" style="display: none;">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Date)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Title)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Details)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Date)
+                </td>
+                <td>
+                    <b>@Html.DisplayFor(modelItem => item.Title)</b>
+                </td>
+                <td>
+                    <pre> @Html.DisplayFor(modelItem => item.Details)</pre>
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.memoId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.memoId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.memoId">Delete</a>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div id="cardView">
+    <div class="row mt">
+        @foreach (var item in Model) {
+
+        <!-- SERVER STATUS PANELS -->
+        <div class="col-md-4 col-sm-4 mb">
+            <a asp-action="Details" asp-route-id="@item.memoId">
+                <div class="white-panel pn donut-chart" ***STYLE INACTIVE***="width:300px !important; height: 150px !important;">
+                    <div class="white-header">
+                        <h5><b><span style="text-transform: uppercase;">@Html.DisplayFor(modelItem => item.Title)</span></b></h5>
+                    </div>
+                    <div class="row" ***STYLE INACTIVE***="width: 300px !important; height: 150px !important;">
+                        <i>@Html.DisplayFor(modelItem => item.Date)</i>
+                        <br><br>
+                        <span>@Html.DisplayFor(modelItem => item.Details)</span>
+                    </div>
+                </div><! --/grey-panel -->
+            </a>
+        </div><!-- /col-md-4-->
+
+        }
+    </div>
+</div>
+</span>
