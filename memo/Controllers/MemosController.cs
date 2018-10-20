@@ -8,10 +8,10 @@ using Microsoft.EntityFrameworkCore;
 using memo.Data;
 using memo.Models;
 using Microsoft.AspNetCore.Identity;
-//using Rotativa;
 using MailKit.Net.Smtp;
 using MailKit;
 using MimeKit;
+
 
 namespace memo.Controllers
 {
@@ -28,55 +28,6 @@ namespace memo.Controllers
             _context = context;
             _signInManager = signInManager;
             _userManager = userManager;
-
-        }
-
-        public async Task<IActionResult> Index(int id = 1, int type = 0)
-        {
-            //return View(await _context.Memo.ToListAsync());
-            Console.WriteLine("Memo Index Type {0}", type);
-            if (_signInManager.IsSignedIn(User))
-            {
-                var userId = _userManager.GetUserId(User);
-                //return View(_context.Memo.ToList().Where(m => m.OwnerId == id));
-                int size = 5;
-                int skip = (id - 1) * size;
-                var countTask = _context.Memo
-                  .Where(m => m.OwnerId == userId)
-                  .CountAsync();
-
-
-                var count = await countTask;
-
-                ViewData["Page"] = id; //pass the curent page to view
-                ViewData["Count"] = count; //pass the count to view
-                ViewData["Type"] = type;
-                if (type == 0)
-                {
-                    var dataTask = _context.Memo
-                        .OrderBy(m => m.Date)
-                        .Where(m => m.OwnerId == userId)
-                        .Skip(skip)
-                        .Take(size)
-                        .ToListAsync();
-                    var results = await dataTask;
-                    return View(results);
-
-                }
-                else
-                {
-                    var dataTask = _context.Memo
-                 .OrderByDescending(m => m.Date)
-                 .Where(m => m.OwnerId == userId)
-                 .Skip(skip)
-                 .Take(size)
-                 .ToListAsync();
-                    var results = await dataTask;
-                    return View(results);
-
-                }
-            }
-            return View(null);
 
         }
 
@@ -132,27 +83,67 @@ namespace memo.Controllers
 
         }
 
+        // GET: Memos
+
+        public async Task<IActionResult> Index(int id = 1, int type = 0)
+        {
+            //return View(await _context.Memo.ToListAsync());
+            Console.WriteLine("Memo Index Type {0}", type);
+            if (_signInManager.IsSignedIn(User))
+            {
+                var userId = _userManager.GetUserId(User);
+                //return View(_context.Memo.ToList().Where(m => m.OwnerId == id));
+                int size = 6;
+                int skip = (id - 1) * size;
+                var countTask = _context.Memo
+                  .Where(m => m.OwnerId == userId)
+                  .CountAsync();
+
+
+                var count = await countTask;
+
+                ViewData["Page"] = id; //pass the curent page to view
+                ViewData["Count"] = count; //pass the count to view
+                ViewData["Type"] = type;
+                if (type == 0)
+                {
+                    var dataTask = _context.Memo
+                        .OrderBy(m => m.Date)
+                        .Where(m => m.OwnerId == userId)
+                        .Skip(skip)
+                        .Take(size)
+                        .ToListAsync();
+                    var results = await dataTask;
+                    return View(results);
+
+                }
+                else
+                {
+                    var dataTask = _context.Memo
+                 .OrderByDescending(m => m.Date)
+                 .Where(m => m.OwnerId == userId)
+                 .Skip(skip)
+                 .Take(size)
+                 .ToListAsync();
+                    var results = await dataTask;
+                    return View(results);
+
+                }
+            }
+            return View(null);
+
+        }
+
         // Report View
-        //public ActionResult GenerateReport() 
-        //{
-        //    if (_signInManager.IsSignedIn(User))
-        //    {
-        //        var id = _userManager.GetUserId(User);
-        //        return View(_context.Memo.ToList().Where(m => m.OwnerId == id)); 
-        //    }
-        //return NoContent();
-        //}
-
-        //public ActionResult GetAll()
-        //{
-        //    return NoContent();
-        //}
-
-        //public ActionAsPdf PrintAll()
-        //{
-        //    var q = new ActionAsPdf("GetAll");
-        //    return q;
-        //}
+        public ActionResult GenerateReport() 
+        {
+            if (_signInManager.IsSignedIn(User))
+            {
+                var id = _userManager.GetUserId(User);
+                return View(_context.Memo.ToList().Where(m => m.OwnerId == id)); 
+            }
+        return NoContent();
+        }
 
         public ActionResult SearchByDateRange(DateTime? fromDate, DateTime? toDate)
         {

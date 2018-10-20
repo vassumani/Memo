@@ -1,54 +1,81 @@
 ﻿@model IEnumerable<memo.Models.Memo>
 
-    @{
+@{
     ViewData["Title"] = "Index";
-    }
+    string countStr = ViewData["Count"].ToString();
+    int count;
+    int.TryParse(countStr, out count);
+    int page;
+    string pageStr = ViewData["Page"].ToString();
+    int.TryParse(countStr, out page);
 
-    <h2>List of Memos</h2>
 
-    <a asp-action="Create" class="btn btn-success btn-sm pull-left">Add New Memo</a>
-    <div id="containernav">
-        <div class="inner-container">
-            <div class="toggle1">
-                <p>List View</p>
-            </div>
-            <div class="toggle1">
-                <p>List View</p>
-            </div>
+
+    int size = 6;
+    var totalPages = (int)Math.Ceiling(Decimal.Divide(count, size));
+    //var firstPage = 1;
+    //var lastPage = totalPages;
+    //var prevPage = Math.Max(page - 1, firstPage);
+    //var nextPage = Math.Min(page + 1, lastPage);
+}
+<h2>List of Memos</h2>
+<h4>Current Page:@pageStr/@totalPages.ToString()</h4>
+<div class="linkwrapper">
+    <div class="linkContent">
+
+        Goto Page: 
+            @for (int i = 1; i <= totalPages; i++)
+            {
+                <span class="pagelist"><a class="linkpage" asp-controller="Memos" asp-action="Index" asp-route-type=@ViewData["Type"] asp-route-id=@i>[@i]</a></span>
+            }
+
+
+    </div>
+</div>
+
+<a asp-action="Create" class="btn btn-success btn-sm pull-left">Add New Memo</a>
+<div id="containernav">
+    <div class="inner-container">
+        <div class="toggle1">
+            <p>List View</p>
         </div>
-        <div class="inner-container" id='toggle-container'>
-            <div class="toggle1">
-                <p>Cards View</p>
-            </div>
-            <div class="toggle1">
-                <p>Cards View</p>
-            </div>
+        <div class="toggle1">
+            <p>List View</p>
         </div>
     </div>
-    <style>
-        #containernav {
-            width: 160px;
-            height: 30px;
-            /*margin: auto;*/
-            position: relative;
-            border-radius: 6px;
-            /*overflow: hidden;*/
-            user-select: none;
-            cursor: pointer;
-            padding-left: 100px !important;
-            margin-left: 120px !important;
-        }
+    <div class="inner-container" id='toggle-container'>
+        <div class="toggle1">
+            <p>Cards View</p>
+        </div>
+        <div class="toggle1">
+            <p>Cards View</p>
+        </div>
+    </div>
+</div>
+<style>
+    #containernav {
+        width: 160px;
+        height: 30px;
+        /*margin: auto;*/
+        position: relative;
+        border-radius: 6px;
+        /*overflow: hidden;*/
+        user-select: none;
+        cursor: pointer;
+        padding-left: 100px !important;
+        margin-left: 120px !important;
+    }
 
-        .inner-container {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: inherit;
-            height: inherit;
-            text-transform: uppercase;
-            font-size: .6em;
-            letter-spacing: .2em;
-        }
+    .inner-container {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: inherit;
+        height: inherit;
+        text-transform: uppercase;
+        font-size: .6em;
+        letter-spacing: .2em;
+    }
 
         .inner-container:first-child {
             background: #e9e9e9;
@@ -62,13 +89,13 @@
             transition: .3s cubic-bezier(0,0,0,1);
         }
 
-        .toggle1 {
-            width: 50%;
-            position: absolute;
-            height: inherit;
-            display: flex;
-            box-sizing: border-box;
-        }
+    .toggle1 {
+        width: 50%;
+        position: absolute;
+        height: inherit;
+        display: flex;
+        box-sizing: border-box;
+    }
 
         .toggle1 p {
             margin: auto;
@@ -77,9 +104,9 @@
         .toggle1:nth-child(1) {
             right: 0;
         }
-    </style>
+</style>
 
-    <script>
+<script>
         var toggle = document.getElementById('containernav');
         var toggleContainer = document.getElementById('toggle-container');
         var toggleNumber;
@@ -104,7 +131,7 @@
             }
             console.log(toggleNumber)
         });
-    </script>
+</script>
 
 <div id="listView" style="display: none;">
     <table class="table">
@@ -124,46 +151,49 @@
         </thead>
         <tbody>
 
-            @foreach (var item in Model) {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Date)
-                </td>
-                <td>
-                    <b>@Html.DisplayFor(modelItem => item.Title)</b>
-                </td>
-                <td>
-                    <pre> @Html.DisplayFor(modelItem => item.Details)</pre>
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.memoId">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.memoId">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.memoId">Delete</a>
-                </td>
-            </tr>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Date)
+                    </td>
+                    <td>
+                        <b>@Html.DisplayFor(modelItem => item.Title)</b>
+                    </td>
+                    <td>
+                        <pre> @Html.DisplayFor(modelItem => item.Details)</pre>
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.memoId">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.memoId">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.memoId">Delete</a> |
+                        <a asp-action="Remind" asp-route-id="@item.memoId">Remind Me</a>
+                    </td>
+                </tr>
             }
         </tbody>
     </table>
 </div>
 <div id="cardView">
     <div class="row mt">
-        @foreach (var item in Model) {
+        @foreach (var item in Model)
+        {
 
-        <!-- SERVER STATUS PANELS -->
-        <div class="col-md-4 col-sm-4 mb">
-            <a asp-action="Details" asp-route-id="@item.memoId">
-                <div class="white-panel pn donut-chart" ***STYLE INACTIVE***="width:300px !important; height: 150px !important;">
-                    <div class="white-header">
-                        <h5><b><span style="text-transform: uppercase;">@Html.DisplayFor(modelItem => item.Title)</span></b></h5>
-                    </div>
-                    <div class="row" ***STYLE INACTIVE***="width: 300px !important; height: 150px !important;">
-                        <i>@Html.DisplayFor(modelItem => item.Date)</i>
-                        <br><br>
-                        <span>@Html.DisplayFor(modelItem => item.Details)</span>
-                    </div>
-                </div><! --/grey-panel -->
-            </a>
-        </div><!-- /col-md-4-->
+            <!-- SERVER STATUS PANELS -->
+            <div class="col-md-4 col-sm-4 mb">
+                <a asp-action="Details" asp-route-id="@item.memoId">
+                    <div class="white-panel pn donut-chart" ***STYLE INACTIVE***="width:300px !important; height: 150px !important;">
+                        <div class="white-header">
+                            <h5><b><span style="text-transform: uppercase;">@Html.DisplayFor(modelItem => item.Title)</span></b></h5>
+                        </div>
+                        <div class="row" ***STYLE INACTIVE***="width: 300px !important; height: 150px !important;">
+                            <i>@Html.DisplayFor(modelItem => item.Date)</i>
+                            <br><br>
+                            <span>@Html.DisplayFor(modelItem => item.Details)</span>
+                        </div>
+                    </div><! --/grey-panel -->
+                </a>
+            </div><!-- /col-md-4-->
 
         }
     </div>
