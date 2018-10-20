@@ -29,7 +29,11 @@
                 <span class="pagelist"><a class="linkpage" asp-controller="Memos" asp-action="Index" asp-route-type=@ViewData["Type"] asp-route-id=@i>[@i]</a></span>
             }
 
-
+         | 
+        Sort Order:
+        <a asp-controller="Memos" asp-action="Index" asp-route-id=@pageStr asp-route-type="0">Older Data First</a>
+        &nbsp;|&nbsp;
+        <a asp-controller="Memos" asp-action="Index" asp-route-id=@pageStr asp-route-type="1">Newer Data First</a>
     </div>
 </div>
 
