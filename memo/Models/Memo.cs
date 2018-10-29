@@ -22,7 +22,7 @@ namespace memo.Models
         public string Title { get; set; }
 
         [Required(ErrorMessage = "Please enter the description")]
-        public string Detail { get; set; }
+        public string Details { get; set; }
 		
 	
     }
