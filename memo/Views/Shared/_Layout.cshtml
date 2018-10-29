@@ -365,18 +365,30 @@ RIGHT SIDEBAR CONTENT
             function submitLoginForm(){
                 document.getElementById('Input_Email').value = document.getElementById('username').value;
                 document.getElementById('Input_Password').value = document.getElementById('password').value;
-                document.getElementById('account').submit();
+                if ((document.getElementById("username").value == "") || (document.getElementById("password").value == "")) {
+                    alert("Enter a username and password");
+                }
+                else {
+                    localStorage.setItem("loginSession", true);
+                    document.getElementById('account').submit();
+                }
             }
                 
             function submitRegisterForm(){
                 document.getElementById('Input_Email').value = document.getElementById('username').value;
                 document.getElementById('Input_Password').value = document.getElementById('password').value;
                 document.getElementById('Input_ConfirmPassword').value = document.getElementById('confirmPassword').value;
-                document.forms[0].submit();
+                if ((document.getElementById("Input_Email").value == "") || (document.getElementById("Input_Password").value == "") || (document.getElementById("Input_ConfirmPassword").value == ""))  {
+                    alert("Incomplete fields, ensure all details are filled in corrected before registering.");
+                }
+                else {
+                    localStorage.setItem("registerSession", true);
+                    document.forms[0].submit();
+                }
             }
             </script>
 					<div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
-						<input class="input100" type="text" name="email" id="username">
+						<input class="input100" type="email" name="email" id="username">
 						<span class="focus-input100"></span>
 						<span class="label-input100">Email</span>
 					</div>
@@ -464,27 +476,67 @@ RIGHT SIDEBAR CONTENT
 	<script src="/assets/login/js/main.js"></script>
 
     <script>
-    window.onload = function()
-    {   
-        if(window.location.href.indexOf("Register") > -1) 
-        {
-            var x = document.getElementById("login");
-            x.style.display = "none";
-            var y = document.getElementById("register");
-            y.style.display = "block";            
-            var x = document.getElementById("loginTitle");
-            x.style.display = "none";
-            var y = document.getElementById("registerTitle");
-            y.style.display = "block";
-        }
-    console.log("hello");
-    var validationError = document.getElementById("form-control input-validation-error");
-    var element =  document.getElementById('form-control input-validation-error');
-    if (typeof(element) != 'undefined' && element != null)
-    {
-    console.log("foundya");
-    }
-    };
+        window.onload = function () {
+            if (window.location.href.indexOf("Register") > -1) {
+                var x = document.getElementById("login");
+                x.style.display = "none";
+                var y = document.getElementById("register");
+                y.style.display = "block";
+                var x = document.getElementById("loginTitle");
+                x.style.display = "none";
+                var y = document.getElementById("registerTitle");
+                y.style.display = "block";
+            }
+
+            /*
+            console.log("hello");
+            var validationError = document.getElementById("form-control input-validation-error");
+            var element = document.getElementById('form-control input-validation-error');
+            if (typeof (element) != 'undefined' && element != null) {
+                console.log("foundya");
+            }
+            console.log("hello2");
+            var element = document.getElementById('text-danger validation-summary-errors');
+            if (typeof (element) != 'undefined' && element != null) {
+                console.log("foundya2");
+            }
+            console.log("hello3");
+            var element3 = document.getElementById('limiter');
+            if (document.body.contains(element3)) {
+                console.log("foundya3");
+            }
+
+            var c = document.getElementById("text-danger validation-summary-errors").childElementCount;
+            console.log(c);
+            */
+
+            if (localStorage.getItem("loginSession") == "true") {
+                localStorage.setItem("loginSession", false);
+                alert("Wrong credentials, try again!");
+            }
+
+            if (localStorage.getItem("registerSession") == "true") {
+                localStorage.setItem("registerSession", false);
+                alert("Weak password complexity or passwords do not match, try again!");
+            }
+
+            if (document.getElementsByTagName("*").length == 107) {
+                //var y = document.getElementById("Invalid login attempt.");
+                //y.style.display = "block";
+                alert("Invalid login attempt. Try again.");
+            }
+
+        };
+        /*
+        $(document).ready(function () {
+            alert("hello");
+            if ($(".limiter")[0]) {
+                alert("found!");
+            } else {
+                alert("fail");
+            }
+        });
+        */
     </script>
 </body>
 </html>
