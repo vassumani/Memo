@@ -18,8 +18,4 @@ namespace memo.Data
   
     }
 	
-	public class DBContent 
-	{
-		
-	}
 }
