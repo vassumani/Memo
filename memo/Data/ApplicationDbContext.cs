@@ -15,10 +15,11 @@ namespace memo.Data
         }
 
         public DbSet<memo.Models.Memo> Memo { get; set; }
-
-
-     
-        
-        
+  
     }
+	
+	public class DBContent 
+	{
+		
+	}
 }
