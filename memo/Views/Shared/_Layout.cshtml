@@ -16,6 +16,7 @@
     }
     else
     {
+    //Post logi page content
     <!DOCTYPE html>
     <html lang="en">
         <head>
@@ -311,9 +312,10 @@ RIGHT SIDEBAR CONTENT
         </body>
     </html>
     }
-    }
-    else
-    {
+                                    }
+                                    else
+                                    {
+//Pre login page content
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -510,6 +512,7 @@ RIGHT SIDEBAR CONTENT
             console.log(c);
             */
 
+            //Temporary bypass while permanent solution is discovered for proper validation checks in user forms
             if (localStorage.getItem("loginSession") == "true") {
                 localStorage.setItem("loginSession", false);
                 alert("Wrong credentials, try again!");
