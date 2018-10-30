@@ -1,7 +1,5 @@
 # Memo
 
-# Welcome to the Memo wiki!
-
 # Project Vision:
 ## 1. Executive Summary
 
